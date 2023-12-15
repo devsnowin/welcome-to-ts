@@ -1,1 +1,1 @@
-# welcome-to-ts
+# Welcome to Typescript 🧙‍♂️
