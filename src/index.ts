@@ -1,17 +1,28 @@
-const dog: string = "Tommy";
+function add(num1: number, num2: number) {
+    return num1 + num2;
+};
 
-dog;
+add(20, 43);
 
-let age = 20;
+/**
+ * Here the functions takes two values and returns the sum of those values.
+ * 
+ * NOTE: Typescript knows the return even if we didn't declare.
+ * 
+ * This may helpful in certain but it also cause some problems in some case.
+ * 
+ * Let's look at it!
+ */
 
-// age = "20"    // Type Error ❌
+function sub(num1: number, num2: number) {
+    if (Math.random() > 0.5) {
+        return num1 - num2;
+    }
+}
 
-export const WAIT = Math.floor(Math.random() * 500) +  500;
+const result = sub(20, -20)
+// console.log(result.toExponential());  // ❌ this may cause error result is `undefined`.
 
-let startTime = new Date();
-let endTime: Date;
-
-setTimeout(() => {
-    // endTime = 0; // 🐞 Type 'number' is not assignable to type 'Date'.
-    startTime = new Date();
-}, WAIT)
+/**
+ Here, In the above code the function may return `undefined`. So, it depends on the use case. When to use types and when not.
+*/ 
