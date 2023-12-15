@@ -1,28 +1,32 @@
-function add(num1: number, num2: number) {
-    return num1 + num2;
+let Movie: {
+    name: string,
+    rating: number,
+    year: Date,
 };
 
-add(20, 43);
+const movies = [];
 
-/**
- * Here the functions takes two values and returns the sum of those values.
- * 
- * NOTE: Typescript knows the return even if we didn't declare.
- * 
- * This may helpful in certain but it also cause some problems in some case.
- * 
- * Let's look at it!
- */
+function addMovie(movie: {
+    name: string,
+    rating: number,
+    year: Date,
+}) {
+    movies.push(movie);
 
-function sub(num1: number, num2: number) {
-    if (Math.random() > 0.5) {
-        return num1 - num2;
-    }
-}
+    // movie.cast   // ❌ this throws an error, cast does not in the type movie.
 
-const result = sub(20, -20)
-// console.log(result.toExponential());  // ❌ this may cause error result is `undefined`.
+    console.log(`${movie.name} added successfully`);
+};
 
-/**
- Here, In the above code the function may return `undefined`. So, it depends on the use case. When to use types and when not.
-*/ 
+/** Optional type */
+
+function getRating(movie: {
+    name: string,
+    rating?: number
+}) {
+
+    // Here, we are checking if the value not equal to undefined or the type of rating is number.
+    if (typeof movie.rating === "number") {
+        return `${movie.name} got ${movie.rating} ratings!!!`;
+    };
+};
