@@ -1,0 +1,11 @@
+{
+  "name": "welcome-to-ts",
+  "packageManager": "yarn@4.0.2",
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "scripts": {
+    "dev": "tsc --watch --preserveWatchOutput",
+    "typecheck": "yarn tsc -P . --noEmit"
+  }
+}
