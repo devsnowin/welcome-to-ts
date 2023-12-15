@@ -5,6 +5,7 @@
     "typescript": "^5.3.3"
   },
   "scripts": {
+    "start": "tsc && node dist/index.js",
     "dev": "tsc --watch --preserveWatchOutput",
     "typecheck": "yarn tsc -P . --noEmit"
   }
