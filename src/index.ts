@@ -1,32 +1,38 @@
-let Movie: {
-    name: string,
-    rating: number,
-    year: Date,
+/** Index signature */
+
+const x: {[k: string]: string} = {}
+
+// Valid signature
+x.foo = "foo"
+
+// ❌ Invalid signature
+// x.foo = 20
+
+// const users = {
+//     mark: {name: 'mark', age: 19},
+//     kevin: {name: 'kevin', age: 28},
+//     doe: {name: 'doe', age: 20},
+// }
+
+// added index signature to it
+
+const users: {
+    [k:string]: {
+        name: string,
+        age: number
+    }
+} = {
+    mark: {name: 'mark', age: 19},
+    kevin: {name: 'kevin', age: 28},
+    doe: {name: 'doe', age: 20},
 };
 
-const movies = [];
+users.snowin;
 
-function addMovie(movie: {
-    name: string,
-    rating: number,
-    year: Date,
-}) {
-    movies.push(movie);
-
-    // movie.cast   // ❌ this throws an error, cast does not in the type movie.
-
-    console.log(`${movie.name} added successfully`);
-};
-
-/** Optional type */
-
-function getRating(movie: {
-    name: string,
-    rating?: number
-}) {
-
-    // Here, we are checking if the value not equal to undefined or the type of rating is number.
-    if (typeof movie.rating === "number") {
-        return `${movie.name} got ${movie.rating} ratings!!!`;
-    };
-};
+// Now look at the type:
+/**
+    users[string]: {
+        name: string;
+        age: number;
+    }
+ */
