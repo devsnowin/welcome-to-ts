@@ -1,67 +1,62 @@
-/** Types in class */
-
-class Person {
-
-    // Static fields
-    static foo = "foo";
-    static #uuid = 100; // private field
-    static #generateId() {return this.#uuid++}  // private field
-    
-    name: string
-    age: number
-    email: string
-    id = Person.#generateId();   // static member
-
-    static {
-        console.log("I am static block, I ran before the constructor!");
-    }
-
-    constructor(name: string, age: number, email: string) {
-        this.name = name;
-        this.age = age;
-        this.email = email;
-        console.log("I am constructor, I ran after the static block! \n");
-    }
-
-    sayHi(times: number) {
-        return `${'Hi,'.repeat(times)} ${this.name}!`
-    }
-}
-
-let u1 = new Person("snowin", 22, "snowin@gmail.com");
-
-// u1.getProfile() // ❌ Error: `getprofile` does not exist on the type Person
-
-
-/** Class Method types */
-const greetU1 = u1.sayHi(2);
-console.log(greetU1);
-// Hi,Hi, snowin!
-
-/** Static field & members */
-console.log(Person.foo)
-// 101
-
-console.log(new Person("mark", 19, "mark@gmail.com"));
-// Person { id: 101, name: 'mark', age: 19, email: 'mark@gmail.com' }
-
-console.log(new Person("jane", 32, "jane@gmail.com"));
-// Person { id: 102, name: 'jane', age: 32, email: 'jane@gmail.com' }
-
-/** STATIC BLOCKS
- * 
- * static blocks are new to javascript.
- * 
- * It actually initialized when the class get initilized.
- * Runs before constructor.
- * Used to generate and get some pre-required data.
- * 
+/** Generics
+ * ---------------
+ * Generics allow us to parameterize types, which unlocks great opportunity to reuse types broadly across a project.
+ *
  */
 
+const phoneList = [
+  { customerId: "0001", areaCode: "321", num: "123-4566" },
+  { customerId: "0002", areaCode: "174", num: "142-3626" },
+  { customerId: "0003", areaCode: "192", num: "012-7190" },
+  { customerId: "0005", areaCode: "402", num: "652-5782" },
+  { customerId: "0004", areaCode: "301", num: "184-8501" },
+];
 
-/** Private:
- * --------------------
- * In JS, the `#` or `private` keyword tells us that the field is private.
- * 
- * Note: The private keyword is limited to the TS ecosystem. It means that if the TS code is complied, the private fields can still be accessed. But by using the '#', which is a javascript way of declaring private fields, we ensure that the field is private even after compliance.
-*/
+// The goal is this 👇
+const phoneDict = {
+  "0001": {
+    customerId: "0001",
+    areaCode: "321",
+    num: "123-4566",
+  },
+  "0002": {
+    customerId: "0002",
+    areaCode: "174",
+    num: "142-3626",
+  },
+  /*... and so on */
+};
+
+interface PhoneInfo {
+  customerId: string;
+  areaCode: string;
+  num: string;
+}
+
+function listToDict<T>(
+  list: T[],
+  idGen: (arg: T) => string
+): { [k: string]: T } {
+  // create an empty dictionary
+  const dict: { [k: string]: T } = {};
+
+  // Loop through the array
+  list.forEach((element) => {
+    const dictKey = idGen(element);
+    dict[dictKey] = element; // store element under key
+  });
+
+  return dict;
+}
+
+const result = listToDict(phoneList, (item) => item.customerId);
+console.log(result);
+// {
+//   '0001': { customerId: '0001', areaCode: '321', num: '123-4566' },
+//   '0002': { customerId: '0002', areaCode: '174', num: '142-3626' },
+//   '0003': { customerId: '0003', areaCode: '192', num: '012-7190' },
+//   '0005': { customerId: '0005', areaCode: '402', num: '652-5782' },
+//   '0004': { customerId: '0004', areaCode: '301', num: '184-8501' }
+// }
+
+// Note: When calling the listToDict function, we are not passing the type arg; the typescript is smart enough to catch the type from the function arg `phoneList`.
