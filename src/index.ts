@@ -1,70 +1,67 @@
-/** Structural and Nominal Typings */
+/** Types in class */
 
-// Structural typings
-/**
- * Focuses on the structure of types.
- * Allows for more flexibility and polymorphism.
- * Enables duck typing, where compatibility is based on having certain  properties/methods rather than a specific type.
- */
+class Person {
 
-interface Point {
-    x: number,
-    y: number
-};
-
-function showPoint(point: Point)  {
-    console.log(`X: ${point.x}, Y: ${point.y}`);
-}
-
-const point = {x: 20, y: 43, z: 98};
-showPoint(point);   // Even it recevies an extra value. It did not throw an error.
-
-
-/**
- * 
- * Nominal Typing:
- * 
- * Focuses on the name or explicit declaration of types.
- * Provides stronger type checking and avoids accidental compatibility
- * between unrelated types.
- * Requires explicit type declarations to establish compatibility.
- * 
- */
-
-class Dog {
-    bark(): void {
-        console.log("Woof!");
-    }
-}
-
-class Cat {
-    meow(): void {
-        console.log("Meow!");
-    }
-}
-
-function petSound(animal: Dog | Cat): void {
-    // animal.bark()    //❌ Error: 'bark' is not a member of 'Dog | Cat'.
+    // Static fields
+    static foo = "foo";
+    static #uuid = 100; // private field
+    static #generateId() {return this.#uuid++}  // private field
     
-    // solution:
-    if (animal instanceof Dog) {
-        animal.bark();
+    name: string
+    age: number
+    email: string
+    id = Person.#generateId();   // static member
+
+    static {
+        console.log("I am static block, I ran before the constructor!");
     }
-    if (animal instanceof Cat) {
-        animal.meow();
+
+    constructor(name: string, age: number, email: string) {
+        this.name = name;
+        this.age = age;
+        this.email = email;
+        console.log("I am constructor, I ran after the static block! \n");
+    }
+
+    sayHi(times: number) {
+        return `${'Hi,'.repeat(times)} ${this.name}!`
     }
 }
 
-/**
- * ---------------- 
- * Extra:
- * ----------------
+let u1 = new Person("snowin", 22, "snowin@gmail.com");
+
+// u1.getProfile() // ❌ Error: `getprofile` does not exist on the type Person
+
+
+/** Class Method types */
+const greetU1 = u1.sayHi(2);
+console.log(greetU1);
+// Hi,Hi, snowin!
+
+/** Static field & members */
+console.log(Person.foo)
+// 101
+
+console.log(new Person("mark", 19, "mark@gmail.com"));
+// Person { id: 101, name: 'mark', age: 19, email: 'mark@gmail.com' }
+
+console.log(new Person("jane", 32, "jane@gmail.com"));
+// Person { id: 102, name: 'jane', age: 32, email: 'jane@gmail.com' }
+
+/** STATIC BLOCKS
  * 
- * typeof vs instancesof
+ * static blocks are new to javascript.
  * 
- * `typeof` is used to determine the data type of a variable or expression.
- * 
- * `instanceof` is used to check if an object is an instance of a particular class or 
- * constructor.
+ * It actually initialized when the class get initilized.
+ * Runs before constructor.
+ * Used to generate and get some pre-required data.
  * 
  */
+
+
+/** Private:
+ * --------------------
+ * In JS, the `#` or `private` keyword tells us that the field is private.
+ * 
+ * Note: The private keyword is limited to the TS ecosystem. It means that if the TS code is complied, the private fields can still be accessed. But by using the '#', which is a javascript way of declaring private fields, we ensure that the field is private even after compliance.
+*/
