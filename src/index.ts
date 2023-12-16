@@ -1,59 +1,70 @@
-/** Array types */
+/** Structural and Nominal Typings */
 
-const names = ["john", "mark", "janny"];
-
-// Here the typescript knows the type of names
+// Structural typings
 /**
- * const names: string[]
- * Array types
+ * Focuses on the structure of types.
+ * Allows for more flexibility and polymorphism.
+ * Enables duck typing, where compatibility is based on having certain  properties/methods rather than a specific type.
  */
 
-let car = [
-    2012,
-    "Toyota",
-    "Coralla"
-];
+interface Point {
+    x: number,
+    y: number
+};
 
-const [year, make, model] = car;
+function showPoint(point: Point)  {
+    console.log(`X: ${point.x}, Y: ${point.y}`);
+}
 
-// In this case, The typescript is not smart enough to know the types. If we look at the type of car.
+const point = {x: 20, y: 43, z: 98};
+showPoint(point);   // Even it recevies an extra value. It did not throw an error.
+
 
 /**
- * let car: (string | number)[] 
- * const names: string[] Array types
- */
-
-// It's an combine of string and number
-
-// solution:
-let car2: [number, string, string] = [
-    2012,
-    "Toyota",
-    "Coralla"
-]
-
-// car2 = ["Toyota", 2022, "Coralla"]  // ❌ Wrong convention
-// car2 = [2022, "Toyota", "Coralla", "Mark"]; // ❌ Too many values 👇
-
-// ❌ Error:
-/**
- * Type '[number, string, string, string]' is not assignable to type '[number, string, string]'.
- * Source has 4 element(s) but target allows only 3.ts(2322)
- */
-
-
-/** Read only array
  * 
- * We ca declare a read-only array 😲?
- * Yes, we can.
+ * Nominal Typing:
+ * 
+ * Focuses on the name or explicit declaration of types.
+ * Provides stronger type checking and avoids accidental compatibility
+ * between unrelated types.
+ * Requires explicit type declarations to establish compatibility.
+ * 
  */
 
-const nums: readonly [number, number] = [22, 43];
+class Dog {
+    bark(): void {
+        console.log("Woof!");
+    }
+}
 
-nums.length;    // output: 2
+class Cat {
+    meow(): void {
+        console.log("Meow!");
+    }
+}
 
-// Now we can't mutate the array
+function petSound(animal: Dog | Cat): void {
+    // animal.bark()    //❌ Error: 'bark' is not a member of 'Dog | Cat'.
+    
+    // solution:
+    if (animal instanceof Dog) {
+        animal.bark();
+    }
+    if (animal instanceof Cat) {
+        animal.meow();
+    }
+}
 
-// nums.push(25)   // ❌ Error: Property 'push' does not exist on type 'readonly [number, number]'.ts(2339).
-
-// NOTE: we can't perform the array mutation methods after we declare an array as `readonly`.
+/**
+ * ---------------- 
+ * Extra:
+ * ----------------
+ * 
+ * typeof vs instancesof
+ * 
+ * `typeof` is used to determine the data type of a variable or expression.
+ * 
+ * `instanceof` is used to check if an object is an instance of a particular class or 
+ * constructor.
+ * 
+ */
